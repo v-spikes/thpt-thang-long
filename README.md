@@ -1,4 +1,4 @@
-# Dấu Ấn Thăng Long — Hanoi: A Millennial Epic
+# THPT Thang Long project
 
 A static website celebrating the culture, people, cuisine, and historical landmarks of Hanoi, Vietnam. Created as a school project for my friends.
 
