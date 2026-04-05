@@ -11,7 +11,7 @@ The site tells the story of Hanoi thru four tabs:
 | Page | Content |
 |------|---------|
 | **Home** (`index.html`) | Introduction to Hanoi's 1,000-year history, from the founding of Thăng Long in 1010 to the present-day capital |
-| **People** (`con-nguoi.html`) | The character of Hanoians — elegance, depth, warmth, a love of learning, and the art of subtle speech |
+| **People** (`con-nguoi.html`) | The character of Hanoians: elegance, depth, warmth, a love of learning, and the art of subtle speech |
 | **Cuisine** (`am-thuc.html`) | Three iconic Hanoi foods: Phở Thìn 13 Lò Đúc, Cốm Làng Vòng, and Cafe Giảng |
 | **Historical Sites** | Hồ Hoàn Kiếm (`di-tich/ho-hoan-kiem.html`) and Văn Miếu Quốc Tử Giám (`di-tich/van-mieu.html`) |
 
