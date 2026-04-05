@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Văn miếu Quốc tử giám – Dấu ấn Thăng Long</title>
+  <style>
+    :root {
+      --gold: #c9933a;
+      --gold-light: #e8b870;
+      --dark: #1a0f07;
+      --warm-brown: #2b1a0e;
+      --cream: #f7edd8;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--dark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgba(26,15,7,0.80) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 52px;
+      height: 52px;
+      background-image: url("../img/logo.webp");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1);
+    }
+    .nav-brand span {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    .nav-dropdown {
+      position: absolute;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .nav-dropdown input[type="checkbox"] { display: none; }
+
+    .nav-dropdown-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.75);
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .nav-dropdown-label:hover { color: var(--gold-light); }
+
+    .nav-dropdown-label::after {
+      content: '›';
+      font-size: 16px;
+      display: inline-block;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-label::after {
+      transform: rotate(90deg);
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 0;
+      background: rgba(26,15,7,0.95);
+      border: 1px solid rgba(201,147,58,0.2);
+      border-top: 2px solid var(--gold);
+      min-width: 160px;
+      padding: 8px 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-menu {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-dropdown-menu a:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-dropdown-menu a.active { color: var(--gold); }
+
+    .nav-sub-dropdown { position: relative; }
+    .nav-sub-dropdown input[type="checkbox"] { display: none; }
+    .nav-sub-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      cursor: pointer;
+      transition: color 0.2s, padding-left 0.2s;
+      user-select: none;
+    }
+    .nav-sub-label:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-label::after {
+      content: '›';
+      font-size: 14px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      display: inline-block;
+      transition: transform 0.25s;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-label::after { transform: rotate(90deg); }
+    .nav-sub-menu {
+      display: none;
+      border-left: 2px solid rgba(201,147,58,0.25);
+      margin-left: 20px;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-menu { display: block; }
+    .nav-sub-menu a {
+      display: block;
+      padding: 8px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.55);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-sub-menu a:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-menu a.active { color: var(--gold); }
+
+    .page-header {
+      position: relative;
+      width: 100%;
+      height: 52vh;
+      min-height: 340px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 70px;
+    }
+    .page-header-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url("../img/bg.jpg");
+      background-size: cover;
+      background-position: center 30%;
+    }
+    .page-header-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26,15,7,0.45) 0%,
+        rgba(26,15,7,0.15) 30%,
+        rgba(26,15,7,0.65) 65%,
+        rgba(26,15,7,0.95) 100%
+      );
+    }
+    .page-header-line {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+    .page-header-content {
+      position: relative;
+      z-index: 2;
+      padding-left: 72px;
+      animation: fadeUp 1.2s ease both;
+      animation-delay: 0.2s;
+    }
+    .page-breadcrumb {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .page-breadcrumb a {
+      color: rgba(201,147,58,0.65);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .page-breadcrumb a:hover { color: var(--gold); }
+    .page-breadcrumb span { margin: 0 8px; opacity: 0.5; }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 700;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 4px 32px rgba(26,15,7,0.6);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .content {
+      background: var(--warm-brown);
+      position: relative;
+      overflow: hidden;
+    }
+    .content::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(180,90,20,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 60% at 80% 70%, rgba(120,60,10,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .content-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 90px 40px 110px;
+    }
+
+    .intro-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 1.85vw, 19.5px);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(247,237,216,0.85);
+      text-align: justify;
+      hyphens: auto;
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(201,147,58,0.15);
+    }
+    .intro-text p { margin-bottom: 1.4em; }
+    .intro-text p:last-child { margin-bottom: 0; }
+
+    .section-block { margin-bottom: 56px; }
+    .section-number {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(201,147,58,0.2);
+      line-height: 1.3;
+    }
+    .section-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 1.85vw, 19.5px);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(247,237,216,0.85);
+      text-align: justify;
+      hyphens: auto;
+    }
+    .section-text p { margin-bottom: 1.6em; }
+    .section-text p:last-child { margin-bottom: 0; }
+    .section-text p:first-child::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.2em;
+      line-height: 0.75;
+      float: left;
+      margin-right: 10px;
+      margin-top: 6px;
+      color: var(--gold);
+    }
+
+    .section-figure {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .section-figure img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid rgba(201,147,58,0.25);
+      filter: sepia(15%) brightness(0.92);
+      transition: filter 0.4s;
+    }
+    .section-figure img:hover { filter: sepia(0%) brightness(1); }
+    .section-figure figcaption {
+      margin-top: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(247,237,216,0.45);
+      letter-spacing: 0.03em;
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(201,147,58,0.15);
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+    .footer-names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(247,237,216,0.5);
+      letter-spacing: 0.05em;
+    }
+    .footer-names span { white-space: nowrap; }
+    .footer-names span::after {
+      content: '·';
+      margin: 0 14px;
+      color: rgba(201,147,58,0.35);
+    }
+    .footer-names span:last-child::after { content: ''; }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-dropdown { left: 20px; }
+      .page-header-content { padding-left: 24px; padding-right: 24px; }
+      .content-inner { padding: 60px 24px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-dropdown">
+      <input type="checkbox" id="nav-toggle"/>
+      <label class="nav-dropdown-label" for="nav-toggle">Dấu ấn Thăng Long</label>
+      <div class="nav-dropdown-menu">
+        <a href="../con-nguoi.html">Con người</a>
+        <a href="../am-thuc.html">Ẩm thực</a>
+        <div class="nav-sub-dropdown">
+          <input type="checkbox" id="sub-toggle"/>
+          <label class="nav-sub-label" for="sub-toggle">Di tích</label>
+          <div class="nav-sub-menu">
+            <a href="ho-hoan-kiem.html">Hồ Hoàn Kiếm</a>
+            <a href="van-mieu.html" class="active">Văn miếu Quốc tử giám</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="nav-brand" href="../index.html">
+      <div class="nav-logo"></div>
+      <span>Hanoi</span>
+    </a>
+  </nav>
+
+  <header class="page-header">
+    <div class="page-header-bg"></div>
+    <div class="page-header-overlay"></div>
+    <div class="page-header-line"></div>
+    <div class="page-header-content">
+      <p class="page-breadcrumb">
+        <a href="../index.html">Trang chủ</a>
+        <span>›</span>
+        Dấu ấn Thăng Long
+        <span>›</span>
+        Di tích
+        <span>›</span>
+        Văn miếu Quốc tử giám
+      </p>
+      <h1 class="page-title">Văn miếu Quốc tử giám</h1>
+    </div>
+  </header>
+
+  <section class="content">
+    <div class="content-inner">
+
+      <figure class="section-figure" style="margin-top: 0; margin-bottom: 48px;">
+        <img src="../img/1.png" alt="Văn miếu Quốc tử giám"/>
+      </figure>
+
+      <div class="intro-text">
+        <p>Văn Miếu và Quốc Tử Giám là quần thể di tích đa dạng và phong phú hàng đầu của thủ đô Hà Nội. Thời Nhà Lý, Văn Miếu – Quốc Tử Giám nằm ở phía Nam kinh thành Thăng Long là tổ hợp gồm hai di tích: Văn Miếu thờ Khổng Tử, các bậc hiền triết Nho giáo và Tư nghiệp Quốc Tử Giám Chu Văn An – người thầy tiêu biểu đạo cao, đức trọng của nền giáo dục Việt Nam; Quốc Tử Giám – Trường Đại học đầu tiên của Việt Nam.</p>
+        <p>Văn Miếu được xây dựng từ năm 1070 dưới thời Vua Lý Thánh Tông (1054–1072), có tạc tượng Chu Công, Khổng Tử cùng tứ phối là Nhan Tử, Tăng Tử, Tư Tử, Mạnh Tử và hình vẽ các hiền nho để thờ cúng, bốn mùa tế lễ.</p>
+      </div>
+
+      <div class="section-block">
+        <p class="section-number">01</p>
+        <h2 class="section-heading">Bia tiến sĩ</h2>
+
+        <figure class="section-figure" style="margin-top: 0; margin-bottom: 36px;">
+          <img src="../img/2.png" alt="Bia tiến sĩ Văn Miếu"/>
+        </figure>
+
+        <div class="section-text">
+          <p>Vào năm 1484, Vua Lê Thánh Tông cho dựng bia Tiến sĩ của những người đỗ Tiến sĩ từ khóa thi năm 1442 trở đi. Nay chỉ còn lại 82 tấm bia tiến sĩ.</p>
+          <p>Bia tiến sĩ Văn Miếu – Quốc Tử Giám đã được Unesco công nhận là Di sản tư liệu thế giới thuộc Chương trình Ký ức Thế giới vào ngày 9/3/2010. Sau Mộc bản Triều Nguyễn, Bia Tiến sĩ Văn Miếu là di sản tư liệu thứ 2 của Việt Nam được đưa vào danh mục Di sản tư liệu thế giới.</p>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <p class="section-number">02</p>
+        <h2 class="section-heading">Khuê Văn Các</h2>
+
+        <figure class="section-figure" style="margin-top: 0; margin-bottom: 36px;">
+          <img src="../img/3.png" alt="Khuê Văn Các"/>
+        </figure>
+
+        <div class="section-text">
+          <p>Khuê Văn Các là công trình kiến trúc tuy không đồ sộ song tỷ lệ hài hòa và đẹp mắt.</p>
+          <p>Tầng trên có 4 cửa hình tròn, hàng lan can con tiện và con sơn đỡ mái bằng gỗ đơn giản, mộc mạc. Mái ngói chồng hai lớp tạo thành công trình 8 mái, gờ mái và mặt mái phẳng.</p>
+          <p>Gác là một lầu vuông tám mái, bốn bên tường gác là cửa sổ tròn hình mặt trời tỏa tia sáng. Hai bên phải trái Khuê Văn Các là Bi Văn Môn và Súc Văn Môn dẫn vào hai khu nhà bia Tiến sĩ.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p class="footer-label">Liên hệ &nbsp;·&nbsp; Trường THPT Thăng Long – 12QT3</p>
+    <div class="footer-names">
+      <span>Nguyễn Thu Hằng</span>
+      <span>Vũ Ngọc Liên</span>
+      <span>Lã Ngọc Diệp</span>
+      <span>Hoàng Ngọc Diệp</span>
+      <span>Vũ Khánh Linh</span>
+      <span>Lê Khánh Linh</span>
+    </div>
+  </footer>
+
+</body>
+</html>

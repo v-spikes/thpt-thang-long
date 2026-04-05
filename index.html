@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hà Nội: Bản Hùng Ca Nghìn Năm</title>
+  <style>
+    :root {
+      --gold: #c9933a;
+      --gold-light: #e8b870;
+      --dark: #1a0f07;
+      --warm-brown: #2b1a0e;
+      --cream: #f7edd8;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--dark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgba(26,15,7,0.80) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 52px;
+      height: 52px;
+      background-image: url("img/logo.webp");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1);
+    }
+    .nav-brand span {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    .nav-dropdown {
+      position: absolute;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .nav-dropdown input[type="checkbox"] {
+      display: none;
+    }
+
+    .nav-dropdown-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.75);
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .nav-dropdown-label:hover { color: var(--gold-light); }
+
+    .nav-dropdown-label::after {
+      content: '›';
+      font-size: 16px;
+      display: inline-block;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-label::after {
+      transform: rotate(90deg);
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 0;
+      background: rgba(26,15,7,0.95);
+      border: 1px solid rgba(201,147,58,0.2);
+      border-top: 2px solid var(--gold);
+      min-width: 160px;
+      padding: 8px 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-menu {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-dropdown-menu a:hover {
+      color: var(--gold-light);
+      padding-left: 26px;
+    }
+
+    .nav-sub-dropdown { position: relative; }
+    .nav-sub-dropdown input[type="checkbox"] { display: none; }
+    .nav-sub-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      cursor: pointer;
+      transition: color 0.2s, padding-left 0.2s;
+      user-select: none;
+    }
+    .nav-sub-label:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-label::after {
+      content: '›';
+      font-size: 14px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      display: inline-block;
+      transition: transform 0.25s;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-label::after { transform: rotate(90deg); }
+    .nav-sub-menu {
+      display: none;
+      border-left: 2px solid rgba(201,147,58,0.25);
+      margin-left: 20px;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-menu { display: block; }
+    .nav-sub-menu a {
+      display: block;
+      padding: 8px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.55);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-sub-menu a:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-menu a.active { color: var(--gold); }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 90px;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url("img/bg.jpg");
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.04);
+      animation: slowZoom 18s ease-out forwards;
+    }
+    @keyframes slowZoom {
+      from { transform: scale(1.04); }
+      to   { transform: scale(1.00); }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26,15,7,0.30) 0%,
+        rgba(26,15,7,0.08) 30%,
+        rgba(26,15,7,0.50) 65%,
+        rgba(26,15,7,0.90) 100%
+      );
+    }
+    .hero-line {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-left: 72px;
+      max-width: 780px;
+      animation: fadeUp 1.4s ease both;
+      animation-delay: 0.3s;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 9vw, 108px);
+      font-weight: 700;
+      line-height: 1.0;
+      color: #fff;
+      text-shadow: 0 6px 48px rgba(26,15,7,0.6);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.2vw, 23px);
+      font-weight: 300;
+      color: rgba(247,237,216,0.88);
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      max-width: 520px;
+    }
+
+    .story {
+      background: var(--warm-brown);
+      position: relative;
+      overflow: hidden;
+    }
+    .story::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(180,90,20,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 60% at 80% 70%, rgba(120,60,10,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .story-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 110px 40px 120px;
+    }
+    .story-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 1.85vw, 19.5px);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(247,237,216,0.85);
+      text-align: justify;
+      hyphens: auto;
+    }
+    .story-text p { margin-bottom: 1.85em; }
+    .story-text p:last-child { margin-bottom: 0; }
+    .story-text p:first-child::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.2em;
+      line-height: 0.75;
+      float: left;
+      margin-right: 10px;
+      margin-top: 6px;
+      color: var(--gold);
+    }
+    .story-closing {
+      margin-top: 64px;
+      padding-top: 44px;
+      border-top: 1px solid rgba(201,147,58,0.25);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(19px, 2.4vw, 27px);
+      color: var(--gold-light);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(201,147,58,0.15);
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+    .footer-names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(247,237,216,0.5);
+      letter-spacing: 0.05em;
+    }
+    .footer-names span { white-space: nowrap; }
+    .footer-names span::after {
+      content: '·';
+      margin: 0 14px;
+      color: rgba(201,147,58,0.35);
+    }
+    .footer-names span:last-child::after { content: ''; }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-dropdown { left: 20px; }
+      .hero-content { padding-left: 24px; padding-right: 24px; }
+      .story-inner { padding: 70px 24px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-dropdown">
+      <input type="checkbox" id="nav-toggle"/>
+      <label class="nav-dropdown-label" for="nav-toggle">Dấu ấn Thăng Long</label>
+      <div class="nav-dropdown-menu">
+        <a href="con-nguoi.html">Con người</a>
+        <a href="am-thuc.html">Ẩm thực</a>
+        <div class="nav-sub-dropdown">
+          <input type="checkbox" id="sub-toggle"/>
+          <label class="nav-sub-label" for="sub-toggle">Di tích</label>
+          <div class="nav-sub-menu">
+            <a href="di-tich/ho-hoan-kiem.html">Hồ Hoàn Kiếm</a>
+            <a href="di-tich/van-mieu.html">Văn miếu Quốc tử giám</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="nav-brand" href="#">
+      <div class="nav-logo"></div>
+      <span>Hanoi</span>
+    </a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Hà Nội</h1>
+      <p class="hero-subtitle">Bản Hùng Ca Nghìn Năm Giữa Lòng Đất Mẹ</p>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="story-inner">
+      <div class="story-text">
+        <p>Ngược dòng thời gian về mùa thu năm Canh Tuất 1010, khi đức vua Lý Thái Tổ dời đô từ Hoa Lư về thành Đại La, ông đã nhìn thấy hình ảnh con rồng vàng bay lên (Thăng Long). Sự kiện đó không chỉ đặt nền móng cho một kinh đô bậc nhất mà còn mở đầu cho một kỷ nguyên văn hiến rực rỡ kéo dài hơn mười thế kỷ.</p>
+        <p>Trải qua bao thăng trầm của các triều đại Lý, Trần, Lê, Mạc... và cả những năm tháng kháng chiến hào hùng, Hà Nội đã tự tôi luyện cho mình một bản lĩnh kiên cường núp sau vẻ ngoài tĩnh lặng. Cái tên "Hà Nội" (nghĩa là "phía trong dòng sông") được vua Minh Mạng đặt chính thức vào năm 1831, gắn liền với địa thế được bao bọc bởi dòng sông Hồng đỏ nặng phù sa. Sự giao thoa giữa kiến trúc cung đình xưa cũ, nét hào hoa của kiến trúc Pháp thuộc và sự vươn mình của một đô thị hiện đại đã tạo nên một Hà Nội độc nhất vô nhị: Cổ kính nhưng không cũ kỹ, năng động nhưng không ồn ã.</p>
+        <p>Ngày nay, Hà Nội không chỉ là trung tâm chính trị, văn hóa, khoa học của cả nước mà còn được UNESCO vinh danh là "Thành phố vì Hòa bình". Mỗi nhịp thở của phố phường, mỗi hơi sương trên mặt hồ Gươm đều như đang kể lại những câu chuyện về quá khứ, hiện tại và một tương lai đầy rạng rỡ của mảnh đất địa linh nhân kiệt này.</p>
+        <p>Hà Nội không chỉ là Thủ đô, mà còn là một mảnh ký ức sống động của dân tộc Việt Nam. Trải qua hơn 1.000 năm lịch sử từ thuở Thăng Long kinh kỳ đến một đô thị hiện đại ngày nay, Hà Nội vẫn giữ cho mình một vẻ đẹp riêng biệt – một sự pha trộn quyến rũ giữa nét cổ kính thâm trầm và sự năng động, hối hả.</p>
+        <p>Đó là một thành phố tĩnh lặng dưới những tán cây cổ thụ bên Hồ Gươm vào sáng sớm, nhưng cũng ngay lập tức sôi động trong nhịp sống của những con phố không ngủ khi đêm về.</p>
+        <p>Hà Nội còn là những mùa hoa đi ngang phố, là mùi hoa sữa nồng nàn mỗi độ thu sang, hay cái lạnh se sắt nhưng ấm áp tình người trong những ngày đông. Đến với mảnh đất này, bạn không chỉ đi du lịch, mà là đang bước vào một cuộc hành trình khám phá những giá trị cốt lõi nhất của tâm hồn Việt.</p>
+        <p>Gói ghém chút tình của phố vào những trang viết, chúng mình mời bạn bước vào một hành trình không vội vã. Hãy để những thanh âm và sắc màu nơi đây dẫn lối, đưa bạn chạm vào những mảnh hồn Hà Nội vẫn luôn dịu dàng bấy lâu.</p>
+      </div>
+      <div class="story-closing">
+        Để lòng mình trôi giữa những mùa hoa Hà Nội nhé!
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="footer-label">Liên hệ &nbsp;·&nbsp; Trường THPT Thăng Long – 12QT3</p>
+    <div class="footer-names">
+      <span>Nguyễn Thu Hằng</span>
+      <span>Vũ Ngọc Liên</span>
+      <span>Lã Ngọc Diệp</span>
+      <span>Hoàng Ngọc Diệp</span>
+      <span>Vũ Khánh Linh</span>
+      <span>Lê Khánh Linh</span>
+    </div>
+  </footer>
+
+</body>
+</html>

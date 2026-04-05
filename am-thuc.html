@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ẩm thực Hà Nội – Dấu ấn Thăng Long</title>
+  <style>
+    :root {
+      --gold: #c9933a;
+      --gold-light: #e8b870;
+      --dark: #1a0f07;
+      --warm-brown: #2b1a0e;
+      --cream: #f7edd8;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--dark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgba(26,15,7,0.80) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 52px;
+      height: 52px;
+      background-image: url("img/logo.webp");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1);
+    }
+    .nav-brand span {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    .nav-dropdown {
+      position: absolute;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .nav-dropdown input[type="checkbox"] { display: none; }
+
+    .nav-dropdown-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.75);
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .nav-dropdown-label:hover { color: var(--gold-light); }
+
+    .nav-dropdown-label::after {
+      content: '›';
+      font-size: 16px;
+      display: inline-block;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-label::after {
+      transform: rotate(90deg);
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 0;
+      background: rgba(26,15,7,0.95);
+      border: 1px solid rgba(201,147,58,0.2);
+      border-top: 2px solid var(--gold);
+      min-width: 160px;
+      padding: 8px 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .nav-dropdown input:checked ~ .nav-dropdown-menu {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-dropdown-menu a:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-dropdown-menu a.active { color: var(--gold); }
+
+    .nav-sub-dropdown { position: relative; }
+    .nav-sub-dropdown input[type="checkbox"] { display: none; }
+    .nav-sub-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.7);
+      cursor: pointer;
+      transition: color 0.2s, padding-left 0.2s;
+      user-select: none;
+    }
+    .nav-sub-label:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-label::after {
+      content: '›';
+      font-size: 14px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      display: inline-block;
+      transition: transform 0.25s;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-label::after { transform: rotate(90deg); }
+    .nav-sub-menu {
+      display: none;
+      border-left: 2px solid rgba(201,147,58,0.25);
+      margin-left: 20px;
+    }
+    .nav-sub-dropdown input:checked ~ .nav-sub-menu { display: block; }
+    .nav-sub-menu a {
+      display: block;
+      padding: 8px 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,237,216,0.55);
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .nav-sub-menu a:hover { color: var(--gold-light); padding-left: 26px; }
+    .nav-sub-menu a.active { color: var(--gold); }
+
+    .page-header {
+      position: relative;
+      width: 100%;
+      height: 52vh;
+      min-height: 340px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 70px;
+    }
+    .page-header-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url("img/bg.jpg");
+      background-size: cover;
+      background-position: center 30%;
+    }
+    .page-header-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26,15,7,0.45) 0%,
+        rgba(26,15,7,0.15) 30%,
+        rgba(26,15,7,0.65) 65%,
+        rgba(26,15,7,0.95) 100%
+      );
+    }
+    .page-header-line {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+    .page-header-content {
+      position: relative;
+      z-index: 2;
+      padding-left: 72px;
+      animation: fadeUp 1.2s ease both;
+      animation-delay: 0.2s;
+    }
+    .page-breadcrumb {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .page-breadcrumb a {
+      color: rgba(201,147,58,0.65);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .page-breadcrumb a:hover { color: var(--gold); }
+    .page-breadcrumb span { margin: 0 8px; opacity: 0.5; }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 700;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 4px 32px rgba(26,15,7,0.6);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .content {
+      background: var(--warm-brown);
+      position: relative;
+      overflow: hidden;
+    }
+    .content::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(180,90,20,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 60% at 80% 70%, rgba(120,60,10,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .content-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 90px 40px 110px;
+    }
+
+    .dish-block {
+      margin-bottom: 72px;
+    }
+
+    .dish-tag {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .dish-subtitle {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(201,147,58,0.2);
+    }
+
+    .dish-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 1.85vw, 19.5px);
+      font-weight: 300;
+      line-height: 2.05;
+      color: rgba(247,237,216,0.85);
+      text-align: justify;
+      hyphens: auto;
+    }
+    .dish-text p { margin-bottom: 1.6em; }
+    .dish-text p:last-child { margin-bottom: 0; }
+    .dish-subtitle + .dish-text p:first-child::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.2em;
+      line-height: 0.75;
+      float: left;
+      margin-right: 10px;
+      margin-top: 6px;
+      color: var(--gold);
+    }
+
+    .highlights {
+      margin-top: 36px;
+      border-top: 1px solid rgba(201,147,58,0.15);
+      padding-top: 28px;
+    }
+    .highlights-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 14px 24px;
+      align-items: baseline;
+    }
+    .highlight-label {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(15px, 1.6vw, 17px);
+      font-weight: 700;
+      color: var(--gold-light);
+      white-space: nowrap;
+    }
+    .highlight-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(15px, 1.7vw, 18px);
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(247,237,216,0.8);
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(201,147,58,0.15);
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+    .footer-names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(247,237,216,0.5);
+      letter-spacing: 0.05em;
+    }
+    .footer-names span { white-space: nowrap; }
+    .footer-names span::after {
+      content: '·';
+      margin: 0 14px;
+      color: rgba(201,147,58,0.35);
+    }
+    .footer-names span:last-child::after { content: ''; }
+
+    .photo-gallery {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .photo-gallery img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(201,147,58,0.2);
+      filter: sepia(10%) brightness(0.9);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .photo-gallery img:hover {
+      filter: sepia(0%) brightness(1);
+      transform: scale(1.02);
+    }
+
+    .section-figure {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .section-figure img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid rgba(201,147,58,0.25);
+      filter: sepia(15%) brightness(0.92);
+      transition: filter 0.4s;
+    }
+    .section-figure img:hover { filter: sepia(0%) brightness(1); }
+    .section-figure figcaption {
+      margin-top: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(247,237,216,0.45);
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-dropdown { left: 20px; }
+      .page-header-content { padding-left: 24px; padding-right: 24px; }
+      .content-inner { padding: 60px 24px 80px; }
+      .photo-gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-dropdown">
+      <input type="checkbox" id="nav-toggle"/>
+      <label class="nav-dropdown-label" for="nav-toggle">Dấu ấn Thăng Long</label>
+      <div class="nav-dropdown-menu">
+        <a href="con-nguoi.html">Con người</a>
+        <a href="am-thuc.html" class="active">Ẩm thực</a>
+        <div class="nav-sub-dropdown">
+          <input type="checkbox" id="sub-toggle"/>
+          <label class="nav-sub-label" for="sub-toggle">Di tích</label>
+          <div class="nav-sub-menu">
+            <a href="di-tich/ho-hoan-kiem.html">Hồ Hoàn Kiếm</a>
+            <a href="di-tich/van-mieu.html">Văn miếu Quốc tử giám</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="nav-brand" href="index.html">
+      <div class="nav-logo"></div>
+      <span>Hanoi</span>
+    </a>
+  </nav>
+
+  <header class="page-header">
+    <div class="page-header-bg"></div>
+    <div class="page-header-overlay"></div>
+    <div class="page-header-line"></div>
+    <div class="page-header-content">
+      <p class="page-breadcrumb">
+        <a href="index.html">Trang chủ</a>
+        <span>›</span>
+        Dấu ấn Thăng Long
+        <span>›</span>
+        Ẩm thực
+      </p>
+      <h1 class="page-title">Ẩm thực Hà Nội</h1>
+    </div>
+  </header>
+
+  <section class="content">
+    <div class="content-inner">
+
+      <div class="dish-block">
+        <p class="dish-tag">01</p>
+        <h2 class="dish-name">Phở Thìn 13 Lò Đúc</h2>
+        <p class="dish-subtitle">Phở – Một thức quà đặc biệt</p>
+
+        <div class="dish-text">
+          <p>Có thể nói, Phở là một thức quà đặc biệt, một dấu ấn riêng khi nhắc đến ẩm thực Việt nói chung, ẩm thực Hà Nội nói riêng. Vị phở thanh đạm nhưng vẫn đảm bảo độ ngọt nước tự nhiên và dậy hương đặc trưng. Từng miếng thịt thái lát mỏng được chỉn chu chuẩn bị cho từng tô phở.</p>
+          <p>Phở Thìn 13 Lò Đúc, do ông Nguyễn Trọng Thìn sáng lập năm 1979, nổi tiếng với món phở bò tái lăn đặc trưng, khác biệt hoàn toàn với phở truyền thống. Thịt bò được xào nhanh trên lửa lớn với tỏi, tạo hương vị thơm lừng, ngậy vị dầu mỡ và nước dùng đậm đà, hành lá phủ kín mặt. Đây là thương hiệu phở lâu đời, uy tín, từng mang văn hóa ẩm thực Việt vươn tầm quốc tế.</p>
+        </div>
+
+        <div class="highlights">
+          <p class="highlights-title">Các đặc điểm nổi bật của Phở Thìn 13 Lò Đúc</p>
+          <div class="highlights-grid">
+            <span class="highlight-label">Món đinh</span>
+            <span class="highlight-desc">Chỉ phục vụ một món duy nhất là phở tái lăn, không có tái, chín, nạm, gầu riêng biệt như các quán khác.</span>
+
+            <span class="highlight-label">Hương vị "khét"</span>
+            <span class="highlight-desc">Thịt bò được tẩm ướp xào tái lăn trên chảo mỡ nóng già, tạo mùi thơm đặc trưng, hơi cháy xém.</span>
+
+            <span class="highlight-label">Nước dùng</span>
+            <span class="highlight-desc">Đậm đà, béo ngậy, nổi một lớp dầu xào thịt bò.</span>
+
+            <span class="highlight-label">Hành lá</span>
+            <span class="highlight-desc">Bát phở ngập hành lá cắt vát, xanh mướt.</span>
+          </div>
+        </div>
+
+        <div class="photo-gallery">
+          <img src="img/pho-thin1.jpg" alt="Phở Thìn 13 Lò Đúc"/>
+          <img src="img/pho-thin2.webp" alt="Phở Thìn 13 Lò Đúc"/>
+          <img src="img/pho-thin3.jpg" alt="Phở Thìn 13 Lò Đúc"/>
+          <img src="img/pho-thin4.jpg" alt="Phở Thìn 13 Lò Đúc"/>
+        </div>
+      </div>
+
+      <div class="dish-block">
+        <p class="dish-tag">02</p>
+        <h2 class="dish-name">Cốm Làng Vòng</h2>
+        <p class="dish-subtitle">Thứ quà đặc biệt nhất trong mọi thứ quà Hà Nội</p>
+
+        <div class="dish-text">
+          <p>Cốm làng Vòng trong tác phẩm "Miếng ngon Hà Nội" được coi là một thứ quà đặc biệt nhất trong mọi thứ quà Hà Nội. Chính vì vậy mà bất kỳ ai đặt chân đến thủ đô đều muốn thưởng thức và mua về làm quà tặng biếu người thân, gia đình, bạn bè và đối tác.</p>
+        </div>
+
+        <div class="photo-gallery" style="grid-template-columns: 1fr; margin-top: 32px;">
+          <img src="img/comhanoi1.jpg" alt="Cốm Làng Vòng"/>
+        </div>
+
+        <div class="dish-text" style="margin-top: 40px;">
+          <p>Từ xa xưa, cốm làng Vòng vốn đã nổi tiếng với câu ca dao:</p>
+        </div>
+
+        <blockquote style="
+          margin: 24px 0 32px;
+          padding: 24px 32px;
+          border-left: 3px solid var(--gold);
+          background: rgba(201,147,58,0.06);
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(17px, 2vw, 21px);
+          font-style: italic;
+          color: var(--gold-light);
+          line-height: 2;
+        ">
+          "Cốm Vòng, gạo tám Mễ Trì<br/>
+          Tương bần, húng Láng còn gì ngon hơn!"
+        </blockquote>
+
+        <div class="photo-gallery" style="grid-template-columns: 1fr; margin-top: 0;">
+          <img src="img/comhanoi2.jpg" alt="Cốm Làng Vòng"/>
+        </div>
+
+        <div class="dish-text" style="margin-top: 40px;">
+          <p>Làng cốm Vòng: Cái tên làng Vòng bắt nguồn từ địa thế của làng là nằm gọn trong một hình tròn bao quanh là một con đường, nghĩa là đi vòng quanh làng theo một con đường. Bên ngoài vòng tròn là thuộc làng khác.</p>
+          <p>Theo thời gian, cốm Vòng nổi tiếng khắp gần xa, được nâng niu, trân trọng, được đóng thành những gói quà tao nhã gửi đến người thân, người sành ăn, rồi trở thành đặc sản tiến vua các triều Lý (1009 – 1225). Giờ đây, cốm làng Vòng là món quà đặc sản mà người Hà Nội rất tâm đắc và hãnh diện.</p>
+          <p>Cốm thường được gói trong hai lớp lá: lớp trong cùng lá ráy tươi để giữ cốm không bị khô, còn ngoài cùng lá sen để bảo quản và đồng thời làm cốm có mùi thoang thoảng hương thơm của sen tươi. Buộc bằng sợi rơm lúa nếp vàng tươi khiến cốm càng trở nên mộc mạc đậm vị đồng quê.</p>
+          <p>Cốm làng Vòng là món ngon Hà Nội được mọi người thưởng thức quanh năm nhưng nhiều nhất là vào mùa thu. Nhiều người nói Hà Nội đẹp nhất mùa thu, thu về se lạnh đi giữa ngoài đường nhìn những gánh cốm vỉa hè, mùa sấu chín, mặt đường đầy lá vàng rơi, không gian thật bình yên nhẹ nhàng.</p>
+        </div>
+
+        <div class="photo-gallery" style="margin-top: 40px;">
+          <img src="img/comhanoi3.jpg" alt="Cốm Làng Vòng"/>
+          <img src="img/comhanoi4.jpg" alt="Cốm Làng Vòng"/>
+        </div>
+      </div>
+
+      <div class="dish-block">
+        <p class="dish-tag">03</p>
+        <h2 class="dish-name">Cafe Giảng</h2>
+        <p class="dish-subtitle">Chất Hà Nội nguyên bản trong từng ngụm cà phê trứng</p>
+
+        <div class="dish-text">
+          <p>Cà Phê Giảng ra đời vào năm 1946, thời điểm mà Hà Nội vẫn đang trong thời kỳ kháng chiến chống Pháp. Cụ Nguyễn Văn Giảng, người sáng lập quán, từng là nhân viên pha chế tại khách sạn Metropole – một trong những khách sạn sang trọng nhất Đông Dương lúc bấy giờ.</p>
+        </div>
+
+        <figure class="section-figure">
+          <img src="img/caphe1.jpg" alt="Gia đình cụ Nguyễn Văn Giảng tại quán năm 1946"/>
+          <figcaption>Gia đình cụ Nguyễn Văn Giảng chụp tại quán vào năm 1946 tại số 90 Cầu Gỗ</figcaption>
+        </figure>
+
+        <div class="dish-text" style="margin-top: 40px;">
+          <p>Trong bối cảnh khan hiếm nguyên liệu như sữa tươi, cụ Giảng đã sáng tạo ra công thức sử dụng lòng đỏ trứng gà đánh bông với đường và sữa đặc, sau đó rót lên trên lớp cà phê nóng, tạo nên một thức uống béo ngậy, thơm ngon và độc đáo. Món cà phê trứng ấy nhanh chóng trở thành biểu tượng của Hà Nội, thu hút cả giới thượng lưu lẫn người dân bình dị.</p>
+          <p>Hiện nay, quán do thế hệ thứ ba của gia đình cụ Giảng quản lý, tiếp tục giữ gìn và phát triển thương hiệu.</p>
+        </div>
+
+        <figure class="section-figure">
+          <img src="img/caphe2.jpg" alt="Bác Hòa – con trai cụ Giảng"/>
+          <figcaption>Bác Hòa – con trai cụ Giảng, người trực tiếp kế thừa thương hiệu cafe Giảng</figcaption>
+        </figure>
+
+        <div class="photo-gallery" style="margin-top: 12px;">
+          <img src="img/caphe3.png" alt="Cafe Giảng"/>
+          <img src="img/caphe4.jpg" alt="Cafe Giảng"/>
+        </div>
+
+        <div class="dish-text" style="margin-top: 40px;">
+          <p>Cafe Giảng không chỉ là nơi thưởng thức cà phê trứng mà còn là mảnh ghép di sản của Hà Nội. Trong không gian cổ kính, mỗi ly cà phê đều gói trọn hơi thở lịch sử và nhịp sống thủ đô qua nhiều thế hệ, tạo nên một trải nghiệm hoài cổ khó quên.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p class="footer-label">Liên hệ &nbsp;·&nbsp; Trường THPT Thăng Long - 12QT3</p>
+    <div class="footer-names">
+      <span>Nguyễn Thu Hằng</span>
+      <span>Vũ Ngọc Liên</span>
+      <span>Lã Ngọc Diệp</span>
+      <span>Hoàng Ngọc Diệp</span>
+      <span>Vũ Khánh Linh</span>
+      <span>Lê Khánh Linh</span>
+    </div>
+  </footer>
+
+</body>
+</html>
