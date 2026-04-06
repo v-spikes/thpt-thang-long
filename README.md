@@ -47,6 +47,6 @@ python -m http.server 8080
 
 ---
 
-Credits:
+## Credits:
 
 Permission approved by members of [12QT3](https://www.instagram.com/qt3nana/)
